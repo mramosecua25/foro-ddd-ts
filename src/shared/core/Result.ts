@@ -3,7 +3,7 @@ export class Result<T> {
   public isFailure: boolean
   public error: T | string
   private _value: T;
-  
+
   public constructor (isSucess: boolean, error?: T | string, value?: T) {
     if (isSucess && error) {
       throw new Error('InvalidOperation: A result cannot be successful and contain an error')
@@ -21,16 +21,16 @@ export class Result<T> {
     Object.freeze(this)
   }
 
-  public getValue(): T {
+  public getValue (): T {
     if (this.isSuccess) {
       console.log(this.error)
-      throw new Error(`Can't get the value of an error result. Use 'errorValue' instead.`)
+      throw new Error("Can't get the value of an error result. Use 'errorValue' instead.")
     }
 
     return this._value
   }
 
-  public errorValue(): T {
+  public errorValue (): T {
     return this.error as T
   }
 
@@ -43,7 +43,7 @@ export class Result<T> {
   }
 
   public static combine (results: Result<any>[]): Result<any> {
-    for (let result of results) {
+    for (const result of results) {
       if (result.isFailure) return result
     }
 
@@ -51,20 +51,18 @@ export class Result<T> {
   }
 }
 
-export type Either<L, A> = Left<L, A> | Right<L, A>
-
 export class Left<L, A> {
   readonly value: L
 
-  constructor(value: L) {
+  constructor (value: L) {
     this.value = value
   }
 
-  isLeft(): this is Left<L,A> {
+  isLeft (): this is Left<L, A> {
     return true
   }
 
-  isRight(): this is Right<L, A> {
+  isRight (): this is Right<L, A> {
     return false
   }
 }
@@ -72,23 +70,25 @@ export class Left<L, A> {
 export class Right<L, A> {
   readonly value: A
 
-  constructor(value: A) {
+  constructor (value: A) {
     this.value = value
   }
 
-  isLeft(): this is Left<L, A> {
+  isLeft (): this is Left<L, A> {
     return false
   }
 
-  isRight(): this is Right<L, A> {
+  isRight (): this is Right<L, A> {
     return true
   }
 }
+
+export type Either<L, A> = Left<L, A> | Right<L, A>
 
 export const left = <L, A>(l: L): Either<L, A> => {
   return new Left(l)
 }
 
 export const right = <L, A>(a: A): Either<L, A> => {
-  return new Right<L,A>(a)
+  return new Right<L, A>(a)
 }

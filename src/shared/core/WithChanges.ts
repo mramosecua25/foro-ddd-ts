@@ -1,5 +1,4 @@
 import { Result } from './Result'
-
 export class Changes {
   private changes: Result<any>[]
 
